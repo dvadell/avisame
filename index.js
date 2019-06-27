@@ -1,16 +1,21 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
+    let message = {}
+    const logID = 'Main:';
         navigator.serviceWorker.register('/sw.js')
         .then( reg => {
-            reg.active.postMessage('update the cache');
-            // console.log(reg)
+            reg.active.postMessage({
+                inSeconds: 1,
+                text: 'Have some coffee'
+            });
+            console.log(logID, 'Sent this message:', message)
         })
         .catch(err => console.log('SW: Error:', err))
 
         navigator.serviceWorker.addEventListener('message', (e) => {
-            console.log('index.js received:', e.data)
+            console.log(logID, 'Received:', e.data)
         })
     })
 } else {
-    console.log(ÂÂ'No serviceWorker support. I cant do it.');
+    console.log('No serviceWorker support. I cant do it.');
 }
