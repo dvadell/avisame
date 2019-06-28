@@ -19,7 +19,7 @@ export class RemindMeForm extends Component {
         const logID = 'RemindMeForm -> handleSubmit:'
         this.props.serviceWorker.then( reg => {
             reg.active.postMessage({
-                inSeconds: 1,
+                inSeconds: 5,
                 text: this.state.messageText
             });
             console.log(logID, 'Sent this message:', this.state.messageText)

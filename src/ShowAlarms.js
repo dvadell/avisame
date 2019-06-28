@@ -1,11 +1,11 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 
 
 export class ShowAlarms extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            messageText: ''
+            alarms: []
         }
     }
 
@@ -13,16 +13,18 @@ export class ShowAlarms extends Component {
         const logID = 'ShowAlarms -> render:'
         navigator.serviceWorker.addEventListener('message', (e) => {
             console.log(logID, 'Received:', e.data)
-            this.setState({
-                messageText: e.data
+            this.setState(state => {
+                return { alarms: [...state.alarms, e.data] }
             })
         })
     }
 
     render() {
-
-
-        return this.state.messageText
+        return <ul>
+            {
+                this.state.alarms.map((alarm,i) => <li key={i}>{alarm}</li>) 
+            }
+        </ul>
     }
 }
 
