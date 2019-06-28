@@ -15,9 +15,6 @@ class App extends Component {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         const logID = 'Main:';
-        // navigator.serviceWorker.addEventListener('message', (e) => {
-        //     console.log(logID, 'Received:', e.data)
-        // })
         this.setState({serviceWorker: navigator.serviceWorker.register('/sw.js')});
       })
     } else {

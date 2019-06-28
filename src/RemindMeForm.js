@@ -1,5 +1,28 @@
 import React, { Component } from 'react'
 
+const parseMessage = (message) => {
+    // remind me in 60 seconds go to lunch
+    let words = message.split(' ')
+    let pointer = words.indexOf('in')
+    pointer++;
+    let number = words[pointer];       // 60
+    pointer++;
+    if (words[pointer][0] === 'm') {   // m(inutes) 
+        number = number * 60;
+    }
+    if (words[pointer][0] === 'h') {   // h(ours) 
+        number = number * 60 * 60;
+    }
+    pointer++;
+    let text = words.slice(pointer)
+    let mensaje = {
+        at: new Date().getTime() + number * 1000,
+        text: text.join(' ')
+    }
+    console.log('parseMessage:', mensaje)
+    return mensaje;
+}
+
 
 export class RemindMeForm extends Component {
     constructor(props) {
@@ -9,18 +32,22 @@ export class RemindMeForm extends Component {
         }
     }
 
-    componentDidMount() {
-        // 
-    }
-
     handleSubmit = (e) => {
         e.preventDefault()
         console.log('handling Submit...');
         const logID = 'RemindMeForm -> handleSubmit:'
+
+        let parsedMessage = parseMessage(this.state.messageText)
         this.props.serviceWorker.then( reg => {
+            // reg.active.postMessage({
+            //     type: 'setAlarm',
+            //     at: new Date().getTime() + 20 * 1000,
+            //     text: this.state.messageText
+            // });            
             reg.active.postMessage({
-                inSeconds: 5,
-                text: this.state.messageText
+                type: 'setAlarm',
+                at: parsedMessage.at,
+                text: parsedMessage.text
             });
             console.log(logID, 'Sent this message:', this.state.messageText)
         })

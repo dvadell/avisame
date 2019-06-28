@@ -1,14 +1,15 @@
 const logID = 'serviceWorker:';
 let locked = false;
 let alarmList = []
-let expiredAlarms = []
 let intervalId;
 let client;
 
 setInterval(() => {
-    console.log('Every 5 seconds:', alarmList.length, 'alarms' )
-    if (client) {
+    console.log('Every 5 seconds: locked:', locked ? 'Y' : 'N', alarmList.length, 'alarms' )
+    if (!locked && client) {
+        locked = true;
         checkAlarms()
+        locked = false;
     }
 }, 5 * 1000);
 
@@ -32,34 +33,29 @@ const checkAlarms = () => {
         alarmList = newList;
 }
 
-const checkThisAlarm = (alarm) => {
-    let now = new Date().getTime()
-
-    if (alarm.at < now) {
-        expiredAlarms.push(alarm)
-    }
-    else {
-        alarmList.push(alarm)
-    }
-    client.postMessage({
-        type: 'alarmStatus',
-        pendingAlarms: alarmList,
-        expiredAlarms: expiredAlarms
-    });
-}
-
 self.addEventListener('message', e => {
     // console.log('ServiceWorker: got message:', e.data)
 
     var promise = self.clients.matchAll().then(clientList => {
         clientList.forEach( currClient => {
+            client = currClient;
             console.log('ServiceWorker: got message:', e.data)            
-            if (currClient.id !== e.source.id || ! e.data.type || e.data.type !== 'setAlarm') {
+            if (client.id !== e.source.id || ! e.data.type || e.data.type !== 'setAlarm') {
                 return;
             }
 
-            client = currClient;
-            checkThisAlarm(e.data)
+            intervalId = setInterval(() => {
+                console.log('immediate setInterval', locked ? 'locked' : 'not locked')
+                if (!locked) {
+                    locked = true;
+                    alarmList.push(e.data);
+                    checkAlarms()
+                    locked = false;
+                    clearInterval(intervalId);
+                }
+            }, 100);
+
+
         });
     });
     e.waitUntil(promise);

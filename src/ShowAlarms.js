@@ -5,26 +5,51 @@ export class ShowAlarms extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            alarms: []
+            pendingAlarms: [],
+            expiredAlarms: []
         }
     }
 
     componentWillMount() {
         const logID = 'ShowAlarms -> render:'
-        navigator.serviceWorker.addEventListener('message', (e) => {
-            console.log(logID, 'Received:', e.data)
-            this.setState(state => {
-                return { alarms: [...state.alarms, e.data] }
-            })
+        navigator.serviceWorker.addEventListener('message', e => {
+            // Messages look like this: {
+            //     type: 'alarmStatus',
+            //     pendingAlarms: newList,
+            //     expiredAlarms: expiredAlarms
+            // }
+            if (e.data.type === 'alarmStatus') {
+                console.log(logID, 'Received:', e.data)
+                this.setState(state => {
+                    return {
+                        pendingAlarms: e.data.pendingAlarms,
+                        expiredAlarms: [...state.expiredAlarms, ...e.data.expiredAlarms]
+                    }
+                })
+            }
+            
+            // console.log('new state', this.state)
         })
     }
 
     render() {
-        return <ul>
-            {
-                this.state.alarms.map((alarm,i) => <li key={i}>{alarm}</li>) 
-            }
-        </ul>
+        var now = new Date().getTime()
+        return (
+            <div>
+                <ul>
+                {
+                    this.state.pendingAlarms.map(
+                        (alarm,i) => 
+                            <li key={i}>{alarm.text} expires in {Math.ceil((alarm.at - now) / 1000) } seconds</li>
+                    ) 
+                }
+                </ul>
+                <ul>
+                {
+                    this.state.expiredAlarms.map((alarm,i) => <li key={i}>{alarm.text} DONE</li>) 
+                }
+                </ul>
+            </div>)
     }
 }
 
