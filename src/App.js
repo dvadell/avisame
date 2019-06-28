@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import RemindMeForm from './RemindMeForm'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      serviceWorker: undefined
+    }
+  }
+
+  componentWillMount() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const logID = 'Main:';
+        navigator.serviceWorker.addEventListener('message', (e) => {
+            console.log(logID, 'Received:', e.data)
+        })
+        this.setState({serviceWorker: navigator.serviceWorker.register('/sw.js')});
+      })
+    } else {
+        console.log('No serviceWorker support. I cant do it.');
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <RemindMeForm serviceWorker={this.state.serviceWorker} />
+      </div>
+    )
+  }
 }
 
 export default App;
