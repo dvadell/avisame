@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RemindMeForm from './RemindMeForm'
+import ShowAlarms from './ShowAlarms'
 import './App.css';
 
 class App extends Component {
@@ -14,9 +15,9 @@ class App extends Component {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         const logID = 'Main:';
-        navigator.serviceWorker.addEventListener('message', (e) => {
-            console.log(logID, 'Received:', e.data)
-        })
+        // navigator.serviceWorker.addEventListener('message', (e) => {
+        //     console.log(logID, 'Received:', e.data)
+        // })
         this.setState({serviceWorker: navigator.serviceWorker.register('/sw.js')});
       })
     } else {
@@ -28,6 +29,7 @@ class App extends Component {
     return (
       <div className="App">
         <RemindMeForm serviceWorker={this.state.serviceWorker} />
+        <ShowAlarms   serviceWorker={this.state.serviceWorker} />
       </div>
     )
   }

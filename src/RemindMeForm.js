@@ -13,7 +13,8 @@ export class RemindMeForm extends Component {
         // 
     }
 
-    handleSubmit = () => {
+    handleSubmit = (e) => {
+        e.preventDefault()
         console.log('handling Submit...');
         const logID = 'RemindMeForm -> handleSubmit:'
         this.props.serviceWorker.then( reg => {

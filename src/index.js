@@ -24,8 +24,8 @@ ReactDOM.render(<App />, document.getElementById('root'));
         // })
         // .catch(err => console.log('SW: Error:', err))
 
-//         navigator.serviceWorker.addEventListener('message', (e) => {
-//             console.log(logID, 'Received:', e.data)
+        // navigator.serviceWorker.addEventListener('message', (e) => {
+        //     console.log(logID, 'Received:', e.data)
 //         })
 //     })
 // } else {
