@@ -11,7 +11,7 @@ export class ShowAlarms extends Component {
     }
 
     componentWillMount() {
-        const logID = 'ShowAlarms -> render:'
+        // const logID = 'ShowAlarms -> render:'
         navigator.serviceWorker.addEventListener('message', e => {
             // Messages look like this: {
             //     type: 'alarmStatus',
@@ -19,17 +19,51 @@ export class ShowAlarms extends Component {
             //     expiredAlarms: expiredAlarms
             // }
             if (e.data.type === 'alarmStatus') {
-                console.log(logID, 'Received:', e.data)
+                // console.log(logID, 'Received:', e.data)
                 this.setState(state => {
                     return {
                         pendingAlarms: e.data.pendingAlarms,
                         expiredAlarms: [...state.expiredAlarms, ...e.data.expiredAlarms]
                     }
                 })
-            }
-            
-            // console.log('new state', this.state)
+            }            
         })
+    }
+
+
+    componentDidMount = () => {
+        window.addEventListener('load', () => {
+            if (this.props.serviceWorker) {
+                this.props.serviceWorker.then( reg => {          
+                    reg.active.postMessage({
+                        type: 'registerToAlarmList'
+                    });
+                })
+                .catch(err => console.log('SW: Error:', err))
+            } else {
+                console.log(this.props)
+            }
+            this.askForPermissionForNotifications()
+        })
+    }
+
+    askForPermissionForNotifications() {
+        // Let's check if the browser supports notifications
+        if (!("Notification" in window)) {
+          console.log("This browser does not support desktop notification");
+          return
+        }
+      
+        // Let's check whether notification permissions have already been granted
+        if (Notification.permission === "granted") {
+          // If it's okay let's create a notification, but we'll leave that for
+          // the serviceWorker.
+          // var notification = new Notification("Hi there!");
+        }
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== "denied") {
+          Notification.requestPermission()
+        }
     }
 
     render() {
@@ -49,7 +83,8 @@ export class ShowAlarms extends Component {
                     this.state.expiredAlarms.map((alarm,i) => <li key={i}>{alarm.text} DONE</li>) 
                 }
                 </ul>
-            </div>)
+            </div>
+        )
     }
 }
 

@@ -35,7 +35,7 @@ export class RemindMeForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         console.log('handling Submit...');
-        const logID = 'RemindMeForm -> handleSubmit:'
+        // const logID = 'RemindMeForm -> handleSubmit:'
 
         let parsedMessage = parseMessage(this.state.messageText)
         this.props.serviceWorker.then( reg => {
@@ -49,7 +49,8 @@ export class RemindMeForm extends Component {
                 at: parsedMessage.at,
                 text: parsedMessage.text
             });
-            console.log(logID, 'Sent this message:', this.state.messageText)
+            // console.log(logID, 'Sent this message:', this.state.messageText)
+            this.setState({ messageText: '' })
         })
         .catch(err => console.log('SW: Error:', err))
     }
@@ -58,7 +59,7 @@ export class RemindMeForm extends Component {
         this.setState({
             messageText: event.target.value
         })
-        console.log('messageText:', this.state.messageText)
+        // console.log('messageText:', this.state.messageText)
     }
 
     render() {
@@ -69,7 +70,7 @@ export class RemindMeForm extends Component {
                     <textarea onChange={this.handleReminder}
                             style={{width: "100%", height: "200px"}}
                             value={this.state.messageText} ></textarea>
-                    <button type="submit" onClick={this.handleSubmit}>Enviar comentario</button>
+                    <button type="submit" onClick={this.handleSubmit}>Create alarm</button>
                 </label>
             </form>
         )
