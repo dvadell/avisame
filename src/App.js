@@ -11,6 +11,19 @@ class App extends Component {
     }
   }
 
+  askForPermissionForNotifications() {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+      return
+    }
+  
+    // Let's check whether notification permissions have already been granted
+    if (Notification.permission !== "denied") {
+      Notification.requestPermission()
+    }
+  }  
+
   componentWillMount() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -20,6 +33,7 @@ class App extends Component {
     } else {
         console.log('No serviceWorker support. I cant do it.');
     }
+    this.askForPermissionForNotifications()
   }
 
   render() {

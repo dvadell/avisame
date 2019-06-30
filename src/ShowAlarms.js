@@ -43,22 +43,10 @@ export class ShowAlarms extends Component {
             } else {
                 console.log(this.props)
             }
-            this.askForPermissionForNotifications()
         })
     }
 
-    askForPermissionForNotifications() {
-        // Let's check if the browser supports notifications
-        if (!("Notification" in window)) {
-          console.log("This browser does not support desktop notification");
-          return
-        }
-      
-        // Let's check whether notification permissions have already been granted
-        if (Notification.permission !== "denied") {
-          Notification.requestPermission()
-        }
-    }
+
 
     render() {
         var now = new Date().getTime()

@@ -14,7 +14,7 @@ const checkAlarms = () => {
         let expiredAlarms = []
         let now = new Date().getTime()
         let newList = alarmList.filter(alarm => {
-                        // console.log(logID, 'evaluating', alarm)
+                        console.log(logID, 'evaluating', alarm)
                         if (alarm.at < now) {
                             // console.log('Alarm', alarm.text, 'expired')
                             self.registration.showNotification(alarm.text)

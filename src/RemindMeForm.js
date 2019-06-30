@@ -60,7 +60,7 @@ export class RemindMeForm extends Component {
         return(
             <form className="pa4 black-80">
                 <label className="f6 b db mb2">
-                    Example: remind me in a minute take a rest <br/>
+                    Example: remind me in 2 minutes take a rest <br/>
                     <textarea onChange={this.handleReminder}
                             style={{width: "100%", height: "200px"}}
                             value={this.state.messageText} ></textarea>
