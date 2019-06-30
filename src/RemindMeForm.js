@@ -38,18 +38,12 @@ export class RemindMeForm extends Component {
         // const logID = 'RemindMeForm -> handleSubmit:'
 
         let parsedMessage = parseMessage(this.state.messageText)
-        this.props.serviceWorker.then( reg => {
-            // reg.active.postMessage({
-            //     type: 'setAlarm',
-            //     at: new Date().getTime() + 20 * 1000,
-            //     text: this.state.messageText
-            // });            
+        this.props.serviceWorker.then( reg => {  
             reg.active.postMessage({
                 type: 'setAlarm',
                 at: parsedMessage.at,
                 text: parsedMessage.text
             });
-            // console.log(logID, 'Sent this message:', this.state.messageText)
             this.setState({ messageText: '' })
         })
         .catch(err => console.log('SW: Error:', err))

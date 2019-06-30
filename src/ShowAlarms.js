@@ -55,13 +55,7 @@ export class ShowAlarms extends Component {
         }
       
         // Let's check whether notification permissions have already been granted
-        if (Notification.permission === "granted") {
-          // If it's okay let's create a notification, but we'll leave that for
-          // the serviceWorker.
-          // var notification = new Notification("Hi there!");
-        }
-        // Otherwise, we need to ask the user for permission
-        else if (Notification.permission !== "denied") {
+        if (Notification.permission !== "denied") {
           Notification.requestPermission()
         }
     }

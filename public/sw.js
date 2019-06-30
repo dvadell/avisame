@@ -17,7 +17,7 @@ const checkAlarms = () => {
                         // console.log(logID, 'evaluating', alarm)
                         if (alarm.at < now) {
                             // console.log('Alarm', alarm.text, 'expired')
-                            self.registration.showNotification(alarm.text, {image: "/public/alert.png"})
+                            self.registration.showNotification(alarm.text)
                             expiredAlarms.push(alarm)
                             return false;
                         }
