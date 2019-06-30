@@ -1,7 +1,7 @@
 # avisame
 Remind me, with service workers and react
 
-This is a test, horribly untidy and unprofessional experiment at learning about notifications in serviceWorkers. You can read about it (https://blog.ardor.link/service-workers-and-notifications/)[here], but in summary:
+This is a test, horribly untidy and unprofessional experiment at learning about notifications in serviceWorkers. You can read about it at https://blog.ardor.link/service-workers-and-notifications/, but in summary:
 
 * The user writes the message and pushes the button to send it.
 * The <RemindMeForm> component receives it and sends a message to the serviceWorker.
